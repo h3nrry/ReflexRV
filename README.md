@@ -1,5 +1,4 @@
 # ReflexRV
-### ReflexRV
 - R - Rapid         -> fast pipeline execution
 - E - Exact         -> deterministic behavior
 - F - Fixed latency -> bounded response time
