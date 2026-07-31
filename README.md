@@ -73,31 +73,33 @@ Within each tier, numbered suffixes denote specific performance/feature grades o
 
 ### ReflexRV-Nano (`N0`–`N7`)
 
-| Variant | Frequency Range | Pipeline | Differentiator | Status |
-|---|---|---|---|---|
-| `ReflexRV-N0` | up to ~50 MHz | 2-stage | RV32I base only, smallest area | Defined |
-| `ReflexRV-N1` | ~50–150 MHz | 2–3 stage | + M extension (multiply/divide) | Defined |
-| `ReflexRV-N2` | ~150–300 MHz | 3-stage | + C extension (compressed) / optional FPU | Defined |
-| `N3`–`N7` | — | — | Reserved for future frequency/feature grades | Reserved |
+| Variant | Frequency Range | Pipeline | Differentiator | Target Competitor (ARM) | Target Competitor (SiFive) | Status |
+|---|---|---|---|---|---|---|
+| `ReflexRV-N0` | up to ~50 MHz | 2-stage | RV32I base only, smallest area | Cortex-M0 / M0+ | Essential E2 Series | Defined |
+| `ReflexRV-N1` | ~50–150 MHz | 2–3 stage | + M extension (multiply/divide) | Cortex-M3 | Essential E2 Series | Defined |
+| `ReflexRV-N2` | ~150–300 MHz | 3-stage | + C extension (compressed) / optional FPU | Cortex-M4 | Essential E24 | Defined |
+| `N3`–`N7` | — | — | Reserved for future frequency/feature grades | — | — | Reserved |
 
 ### ReflexRV-Pulse (`P0`–`P7`)
 
-| Variant | Frequency Range | Pipeline | Differentiator | Status |
-|---|---|---|---|---|
-| `ReflexRV-P0` | ~300–600 MHz | 5-stage | Base real-time core, M extension | Defined |
-| `ReflexRV-P1` | ~600 MHz–1 GHz | 6–7 stage | + FPU option, expanded MPU region count | Defined |
-| `ReflexRV-P2` | ~1–1.5 GHz | 7–8 stage | Dual-core lockstep option for functional safety | Defined |
-| `P3`–`P7` | — | — | Reserved for future frequency/feature grades | Reserved |
+| Variant | Frequency Range | Pipeline | Differentiator | Target Competitor (ARM) | Target Competitor (SiFive) | Status |
+|---|---|---|---|---|---|---|
+| `ReflexRV-P0` | ~300–600 MHz | 5-stage | Base real-time core, M extension | Cortex-R5 | Essential S7 Series | Defined |
+| `ReflexRV-P1` | ~600 MHz–1 GHz | 6–7 stage | + FPU option, expanded MPU region count | Cortex-R7 | Essential S7 Series | Defined |
+| `ReflexRV-P2` | ~1–1.5 GHz | 7–8 stage | Dual-core lockstep option for functional safety | Cortex-R52 (lockstep) | Essential S7 Series | Defined |
+| `P3`–`P7` | — | — | Reserved for future frequency/feature grades | — | — | Reserved |
 
 ### ReflexRV-Apex (`E0`–`E7` / `X0`–`X7`)
 
-| Variant | Frequency Range | Pipeline | Differentiator | Status |
-|---|---|---|---|---|
-| `ReflexRV-Apex-E0` | >1.5 GHz | 8-stage, in-order | Base application core, single-issue | Defined |
-| `ReflexRV-Apex-E1` | >1.5 GHz | 9–10 stage, in-order | Dual-issue, larger cache | Defined |
-| `ReflexRV-Apex-X0` | >1.5 GHz | 10-stage, OoO | Entry OoO, narrow reorder window | Defined |
-| `ReflexRV-Apex-X1` | >1.5 GHz | 12–15 stage, OoO | Wide OoO, deeper reorder buffer, multi-core cluster option | Defined |
-| `E2`–`E7` / `X2`–`X7` | — | — | Reserved for future performance grades | Reserved |
+| Variant | Frequency Range | Pipeline | Differentiator | Target Competitor (ARM) | Target Competitor (SiFive) | Status |
+|---|---|---|---|---|---|---|
+| `ReflexRV-Apex-E0` | >1.5 GHz | 8-stage, in-order | Base application core, single-issue | Cortex-A55 (single-issue config) | Performance U54 | Defined |
+| `ReflexRV-Apex-E1` | >1.5 GHz | 9–10 stage, in-order | Dual-issue, larger cache | Cortex-A55 (dual-issue) | Performance U74 | Defined |
+| `ReflexRV-Apex-X0` | >1.5 GHz | 10-stage, OoO | Entry OoO, narrow reorder window | Cortex-A76 | Performance P550 | Defined |
+| `ReflexRV-Apex-X1` | >1.5 GHz | 12–15 stage, OoO | Wide OoO, deeper reorder buffer, multi-core cluster option | Cortex-X2 | Performance P550 (multi-core cluster) | Defined |
+| `E2`–`E7` / `X2`–`X7` | — | — | Reserved for future performance grades | — | — | Reserved |
+
+> Competitor mappings are directional (based on pipeline depth, issue width, and target frequency), not exact spec-for-spec equivalents — useful for positioning conversations, not for marketing claims without independent verification.
 
 ## License
 
