@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(verilator --lint-only -Wall --top-module reflexrv_ifu -GFETCH_WIDTH=2 -GENABLE_C=1 -GENABLE_BPU=1 -GFETCH_QUEUE_DEPTH=16 rtl/pkg/reflexrv_pkg.sv rtl/ifu/reflexrv_btb.sv rtl/ifu/reflexrv_fetch_queue.sv rtl/ifu/reflexrv_ifu.sv)"
+    ]
+  }
+}
