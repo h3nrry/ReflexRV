@@ -23,7 +23,7 @@ Real-time, mid-range RISC-V core in the [ReflexRV](../README.md) family. Built f
 
 ```
 Pulse/
-└── rtl/    # RTL source
+└── rtl/    # RTL source (see rtl/README.md for module details)
 ```
 
 ## License
