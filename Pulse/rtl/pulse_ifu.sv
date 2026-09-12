@@ -26,9 +26,18 @@
 // memory read, so the currently-held instruction/PC/valid stay stable across
 // stall cycles until the next stage is ready to accept them.
 //
-// Out of scope for this revision: branch/jump redirect and pipeline flush. Once
-// a branch-resolution stage exists, add redirect_valid_i / redirect_pc_i inputs
-// that mux into pc_next and a flush_i that forces instr_valid_o low for one cycle.
+// redirect_valid_i / redirect_pc_i implement branch/jump redirect and pipeline
+// flush, driven by whatever stage resolves control flow (pulse_exu, via
+// pulse_core). redirect_valid_i takes priority over stall_i — a resolved
+// redirect must never be deferred by an unrelated stall — and does two things
+// on the same edge: (1) loads pc_q with redirect_pc_i instead of pc_next, so
+// the corrected address is requested starting next cycle, and (2) forces
+// instr_valid_o low for the following cycle. Only one cycle of suppression is
+// needed, not two: this module only ever has one fetch outstanding (that's
+// the whole point of the one-cycle pc_out_q shadow instead of a real FIFO), so
+// the moment redirect_pc_i is loaded, the *next* imem_addr_o is already the
+// corrected one — the single cycle of squashed output covers exactly the one
+// wrong-path request that was already in flight when the redirect arrived.
 
 module pulse_ifu #(
   parameter logic [31:0] RESET_PC = 32'h0000_0000
@@ -38,6 +47,10 @@ module pulse_ifu #(
 
   // Backpressure from the next stage (or from imem not being ready).
   input  logic        stall_i,
+
+  // Redirect from a later stage (branch/jump resolution, trap entry, ...).
+  input  logic         redirect_valid_i,
+  input  logic [31:0]  redirect_pc_i,
 
   // Instruction memory port (synchronous, 1-cycle read latency).
   output logic        imem_req_o,
@@ -62,6 +75,10 @@ module pulse_ifu #(
       pc_q     <= RESET_PC;
       pc_out_q <= RESET_PC;
       valid_q  <= 1'b0;
+    end else if (redirect_valid_i) begin
+      pc_q     <= redirect_pc_i;
+      pc_out_q <= pc_q;   // don't-care: instr_valid_o is low this cycle
+      valid_q  <= 1'b0;
     end else if (!stall_i) begin
       pc_q     <= pc_next;
       pc_out_q <= pc_q;
@@ -69,11 +86,11 @@ module pulse_ifu #(
     end
   end
 
-  assign imem_req_o  = rst_ni & ~stall_i;
+  assign imem_req_o  = rst_ni & (redirect_valid_i | ~stall_i);
   assign imem_addr_o = pc_q;
 
   assign instr_valid_o = valid_q;
   assign instr_o       = imem_rdata_i;
   assign instr_pc_o    = pc_out_q;
 
-endmodule
+endmodule : pulse_ifu
