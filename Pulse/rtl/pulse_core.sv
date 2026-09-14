@@ -75,17 +75,23 @@ module pulse_core
   input  logic        clk_i,
   input  logic        rst_ni,
 
-  // Instruction memory port (synchronous, 1-cycle read latency).
+  // Instruction memory port: decoupled request/grant, independent response
+  // valid (see pulse_ifu's header) — e.g. pulse_l1sys sits behind this port
+  // in a system with a real, variable-latency memory/bus.
   output logic        imem_req_o,
   output logic [31:0] imem_addr_o,
+  input  logic         imem_gnt_i,
+  input  logic         imem_valid_i,
   input  logic [31:0] imem_rdata_i,
 
-  // Data memory port (synchronous, 1-cycle read latency).
+  // Data memory port: same decoupled contract (see pulse_lsu's header).
   output logic        dmem_req_o,
   output logic        dmem_we_o,
   output logic [31:0] dmem_addr_o,
   output logic [3:0]  dmem_be_o,
   output logic [31:0] dmem_wdata_o,
+  input  logic        dmem_gnt_i,
+  input  logic        dmem_valid_i,
   input  logic [31:0] dmem_rdata_i,
 
   // Precisely-pipelined trap detection (see header: not yet vectored anywhere).
@@ -120,6 +126,8 @@ module pulse_core
     .redirect_pc_i    (redirect_pc),
     .imem_req_o       (imem_req_o),
     .imem_addr_o      (imem_addr_o),
+    .imem_gnt_i       (imem_gnt_i),
+    .imem_valid_i     (imem_valid_i),
     .imem_rdata_i     (imem_rdata_i),
     .instr_valid_o    (if_valid),
     .instr_o          (if_instr),
@@ -370,11 +378,10 @@ module pulse_core
     .dmem_addr_o   (dmem_addr_o),
     .dmem_be_o     (dmem_be_o),
     .dmem_wdata_o  (dmem_wdata_o),
+    .dmem_gnt_i    (dmem_gnt_i),
+    .dmem_valid_i  (dmem_valid_i),
     .dmem_rdata_i  (dmem_rdata_i),
     .valid_o       (lsu_valid),
-    /* verilator lint_off PINCONNECTEMPTY */
-    .stall_o       (),  // pulse_core derives its own mem_stall from lsu_req & ~lsu_valid
-    /* verilator lint_on PINCONNECTEMPTY */
     .rdata_o       (lsu_rdata)
   );
 
